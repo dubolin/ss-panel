@@ -1,6 +1,7 @@
 <?php
 require_once '_main.php';
-$invite = new \Ss\User\Invite($uid);
+$I = new \Ss\User\Invite($uid);
+$key = $U->InviteKey();
 ?>
 
     <!-- =============================================== -->
@@ -26,10 +27,10 @@ $invite = new \Ss\User\Invite($uid);
                             <h3 class="box-title">我的邀请码</h3>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <p><code><?php   echo $U->InviteKey();  ?></code></p>
-                            <?php  if($U->InviteKey() == ''){ ?>
-                                <button id="invite" class="btn btn-sm btn-info">生成我的邀请码</button>
-                            <?php } ?>
+                            <p><code><?php echo $key;?></code></p>
+                            <div class="form-group">
+                                <input type="text" class="form-control" value="<?php echo $site_url."user/before.php?invite=".$key;?>">
+                            </div>
 
                             <div id="msg-error" class="alert alert-warning alert-dismissable" style="display:none">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -56,7 +57,7 @@ $invite = new \Ss\User\Invite($uid);
                                 <tbody>
                                 <?php
                                 $a = 0;
-                                $list = $invite->InviteArray($uid);
+                                $list = $I->InviteArray($uid);
                                 foreach($list as $data ){
                                     ?>
                                     <tr>

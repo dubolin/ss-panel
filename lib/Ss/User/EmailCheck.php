@@ -43,6 +43,7 @@ class EmailCheck {
                 "AND" => [
                     "email" => $email,
                     "uni_char" => $char
+
                 ],
                 "LIMIT"   => '1'
             ]);

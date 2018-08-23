@@ -1,6 +1,6 @@
 <?php
 require_once '../lib/config.php';
-
+$invite = $_GET['invite'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,7 +26,7 @@ require_once '../lib/config.php';
 <body class="login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b><?php echo $site_name;  ?></b></a>
+        <a href="#"><b><?php echo $site_name;?></b></a>
     </div><!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">获取注册连接</p>
@@ -36,7 +36,7 @@ require_once '../lib/config.php';
             </div>
 
             <div class="form-group has-feedback">
-                <input type="text" id="invite" class="form-control" placeholder="邀请码"/>
+                <input type="text" id="invite" class="form-control" placeholder="邀请码" value="<?php echo $invite;?>" />
                 <span class="glyphicon glyphicon-send form-control-feedback"></span>
             </div>
 
