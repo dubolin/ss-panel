@@ -4,12 +4,15 @@ $email = $_POST['email'];
 $email = strtolower($email);
 $passwd = $_POST['passwd'];
 $repasswd = $_POST['repasswd'];
-$agree = $_POST['agree'];
+$emailcode = $_POST['emailcode'];
 $code = strtoupper($_POST['code']);
 
 $c = new \Ss\User\UserCheck();
-// $code = new \Ss\User\InviteCode($code);
-if(!$c->IsUserInviteKey($code)){
+$rst = new \Ss\User\EmailCheck($email);
+if(!$rst->IsCharOK($emailcode,$email)){
+    $a['url'] = '/user/before.php';
+    $a['msg'] = "邮箱验证无效";
+}elseif(!$c->IsUserInviteKey($code)){
     $a['msg'] = "邀请码无效";
 }elseif(!$c->IsEmailLegal($email)){
     $a['msg'] = "邮箱无效";

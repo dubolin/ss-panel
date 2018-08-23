@@ -9,15 +9,20 @@ use PHPMailer\PHPMailer\Exception;
 $mail = new PHPMailer(true);
 
 $email    = $_GET['email'];
+$email = strtolower($email);
+$invite    = strtoupper($_GET['invite']);
 $c = new \Ss\User\UserCheck();
-$q = new \Ss\User\Query();
 $a = [];
 if($c->IsEmailUsed($email)){
-    $uid = $q->GetUidByEmail($email);
-    $rst = new \Ss\User\ResetPwd($uid);
-    if($rst->IsAbleToReset()){
-        $code = $rst->NewLog();
-        //send
+    $a['code'] = '0';
+    $a['msg']  =  "邮箱已注册";
+}elseif(!$c->IsUserInviteKey($invite)){
+    $a['code'] = '0';
+    $a['msg'] = "邀请码无效";
+}else{
+    $rst = new \Ss\User\EmailCheck($email);
+    if($rst->IsAbleToRegister()){
+        $code = $rst->NewLog();        //send
         try {
             $mail->Charset='UTF-8';
             $mail->SMTPDebug = 0;
@@ -31,23 +36,20 @@ if($c->IsEmailUsed($email)){
             $mail->setFrom($mail_smtp_Account, $sender);
             $mail->addAddress($email);
             $mail->isHTML(true);
-            $mail->Subject = $site_name."重置密码";
-            $mail->Body    = '请访问此链接申请重置密码'.$site_url."user/resetpwd_do.php?code=".$code."&uid=".$uid;
+            $mail->Subject = $site_name."注册连接";
+            $mail->Body    = '请访问此链接申请注册'.$site_url."user/register.php?invite=".$invite."&code=".$code."&email=".$email;
             $mail->send();
             $a['code'] = '1';
             $a['ok'] = '1';
-            $a['msg'] = "已经发送到邮箱";
+            $a['msg'] = "注册连接已经发送到邮箱";
         } catch (Exception $e) {
-                $a['code'] = '0';
-                $a['msg'] = "邮件发送失败";
+            $a['code'] = '0';
+            $a['msg'] = "邮件发送失败";
         }
     }else{
         $a['code'] = '0';
         $a['msg']  =  "24小时内申请超过上限";
     }
-}else{
-    $a['code'] = '0';
-    $a['msg']  =  "邮箱不存在";
 }
 echo json_encode($a);
 

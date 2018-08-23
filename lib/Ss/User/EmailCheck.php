@@ -3,45 +3,46 @@
 namespace Ss\User;
 
 
-class ResetPwd {
+class EmailCheck {
 
     private $db;
-    private $uid;
+    private $table = "ss_email";
+    private $email;
 
-    function __construct($uid=0){
+    function __construct($email = 0){
         global $db;
         $this->db  = $db;
-        $this->uid = $uid;
+        $this->email = $email;
     }
 
     function NewLog(){
         $init_time = time();
         $expire_time = $init_time+3600*24;
-        $char = md5($init_time).md5($this->uid);
+        $char = md5($init_time).md5($this->email);
         $char = base64_encode($char);
         $uni_char = substr($char,rand(1,30),32);
-        $this->db->insert("ss_reset_pwd",[
+        $this->db->insert($this->table,[
             "init_time" => $init_time,
             "expire_time" => $expire_time,
-            "user_id" => $this->uid,
+            "email" => $this->email,
             "uni_char" => $uni_char
         ]);
         return $uni_char;
     }
 
-    function IsCharOK($char,$uid){
-        if($this->db->has("ss_reset_pwd",[
+    function IsCharOK($char,$email){
+        if(empty($char) || empty($email)) return false;
+        if($this->db->has($this->table,[
             "AND" => [
-                "user_id" => $uid,
+                "email" => $email,
                 "uni_char" => $char
             ]
         ])){
             //
-            $datas = $this->db->select("ss_reset_pwd","*",[
+            $datas = $this->db->select($this->table,"*",[
                 "AND" => [
-                    "user_id" => $uid,
+                    "email" => $email,
                     "uni_char" => $char
-
                 ],
                 "LIMIT"   => '1'
             ]);
@@ -57,27 +58,26 @@ class ResetPwd {
         }
     }
 
-    function Del($char,$uid)
+    function Del($char,$email)
     {
-        $this->db->delete("ss_reset_pwd", [
+        $this->db->delete($this->table, [
             "AND" => [
-                "user_id" => $uid,
-                "uni_char" => $char
+                "email" => $email
             ]
         ]);
     }
 
     function LogCount(){
-        $sum = $this->db->count("ss_reset_pwd",[
+        $sum = $this->db->count($this->table,[
             "AND" => [
-                "user_id" => $this->uid,
+                "email" => $this->email,
                 "expire_time[>]" => time()
             ]
         ]);
         return $sum;
     }
 
-    function IsAbleToReset(){
+    function IsAbleToRegister(){
         if($this->LogCount()>3){
             return false;
         }else{

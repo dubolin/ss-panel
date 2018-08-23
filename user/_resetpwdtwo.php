@@ -35,6 +35,7 @@ if(!$rs){
     if($rst->IsCharOK($code,$uid)){
         $NewPwd = $password;
         try {
+            $mail->Charset='UTF-8';
             $mail->SMTPDebug = 0;
             $mail->isSMTP();
             $mail->Host = $mail_smtp_Server;

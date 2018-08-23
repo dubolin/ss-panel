@@ -1,13 +1,6 @@
 <?php
 require_once '../lib/config.php';
-$code = $_GET['code'];
-$email = $_GET['email'];
-$invite = $_GET['invite'];
-$rst = new \Ss\User\EmailCheck($email);
-if(empty($invite) || $rst->IsCharOK($code,$email)) {
-    header("location:/user/before.php");
-    exit;
-}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -30,45 +23,27 @@ if(empty($invite) || $rst->IsCharOK($code,$email)) {
     <script src="//oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 </head>
-<body class="register-page">
-<div class="register-box">
-    <div class="register-logo">
-        <a href="../"><b><?php echo $site_name;  ?></b></a>
-    </div>
+<body class="login-page">
+<div class="login-box">
+    <div class="login-logo">
+        <a href="#"><b><?php echo $site_name;  ?></b></a>
+    </div><!-- /.login-logo -->
+    <div class="login-box-body">
+        <p class="login-box-msg">获取注册连接</p>
+            <div class="form-group has-feedback">
+                <input id="email" name="Email" type="text" class="form-control" placeholder="Email"/>
+                <span  class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            </div>
 
-    <div class="register-box-body">
-        <p class="login-box-msg">注册，轻松科学上网。</p>
-
-            <!-- <div class="form-group has-feedback">
-                <input type="text" id="name" class="form-control" placeholder="昵称"/>
-                <span class="glyphicon glyphicon-user form-control-feedback"></span>
-            </div> -->
             <div class="form-group has-feedback">
-                <input type="text" id="email" class="form-control" placeholder="邮箱" value="<?php echo $email;?>" />
-                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-            </div>
-            <div class="form-group has-feedback">
-                <input type="password" id="passwd" class="form-control" placeholder="密码"/>
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-            </div>
-            <div class="form-group has-feedback">
-                <input type="password" id="repasswd" class="form-control" placeholder="重复密码"/>
-                <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
-            </div>
-            <div class="form-group has-feedback">
-                <input type="text" id="code" class="form-control" placeholder="邀请码" value="<?php echo $invite;?>" />
+                <input type="text" id="invite" class="form-control" placeholder="邀请码"/>
                 <span class="glyphicon glyphicon-send form-control-feedback"></span>
             </div>
-            <input type="hidden" id="emailcode" value="<?php echo $code;?>">
 
             <div class="form-group has-feedback">
-               <p>注册即代表同意<a href="tos.php">服务条款</a></p>
+                <button type="submit" id="sendemail" class="btn btn-primary btn-block btn-flat">发送</button>
             </div>
-
-            <div class="form-group has-feedback">
-                <button type="submit" id="reg" class="btn btn-primary btn-block btn-flat">同意服务条款并提交注册</button>
-            </div>
-            
+    
             <div id="msg-success" class="alert alert-info alert-dismissable" style="display: none;">
                 <button type="button" class="close" id="ok-close" aria-hidden="true">&times;</button>
                 <h4><i class="icon fa fa-info"></i> 成功!</h4>
@@ -81,9 +56,10 @@ if(empty($invite) || $rst->IsCharOK($code,$email)) {
                 <p id="msg-error-p"></p>
             </div>
 
-        <a href="login.php" class="text-center">已经注册？请登录</a>
-    </div><!-- /.form-box -->
-</div><!-- /.register-box -->
+        <a href="login.php" class="text-center">返回登录</a>
+
+    </div><!-- /.login-box-body -->
+</div><!-- /.login-box -->
 
 <!-- jQuery 2.1.3 -->
 <script src="../asset/js/jQuery.min.js"></script>
@@ -98,42 +74,32 @@ if(empty($invite) || $rst->IsCharOK($code,$email)) {
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' // optional
         });
-        // $("#msg-error").hide(100);
-        // $("#msg-success").hide(100);
-
     });
+    // $("#msg-error").hide();
+    // $("#msg-success").hide();
 </script>
+
 <script>
     $(document).ready(function(){
-         function register(){
+        var sendemailkey = 0;
+        function sendemail(){
+            if(sendemailkey) return;
+            sendemailkey = 1;
             $.ajax({
-                type:"POST",
-                url:"_reg.php",
+                type:"GET",
+                url:"_before.php?invite="+$("#invite").val()+"&email="+$("#email").val(),
                 dataType:"json",
-                data:{
-                    email: $("#email").val(),
-                    //name: $("#name").val(),
-                    passwd: $("#passwd").val(),
-                    repasswd: $("#repasswd").val(),
-                    code: $("#code").val(),
-                    emailcode: $("#emailcode").val()
-                },
                 success:function(data){
-                    console.log(data);
                     if(data.ok){
-                        $("#msg-error").hide(10);
+                        $("#msg-error").hide(100);
                         $("#msg-success").show(100);
                         $("#msg-success-p").html(data.msg);
-                        window.setTimeout("location.href='login.php'", 2000);
+                        window.setTimeout("location.href='index.php'", 2000);
                     }else{
                         $("#msg-error").hide(10);
                         $("#msg-error").show(100);
                         $("#msg-error-p").html(data.msg);
-                        // if(data.url){
-                        //     setTimeout(function(url) {
-                        //         window.location.href=url;
-                        //     }, 3000,data.url);
-                        // }
+                        sendemailkey = 0;
                     }
                 },
                 error:function(jqXHR){
@@ -142,16 +108,17 @@ if(empty($invite) || $rst->IsCharOK($code,$email)) {
                     $("#msg-error-p").html("发生错误："+jqXHR.status);
                     // 在控制台输出错误信息
                     console.log(removeHTMLTag(jqXHR.responseText));
+                    sendemailkey = 0;
                 }
             });
-        }
+          }
         $("html").keydown(function(event){
             if(event.keyCode==13){
-                register();
+                sendemail();
             }
         });
-        $("#reg").click(function(){
-            register();
+        $("#sendemail").click(function(){
+            sendemail();
         });
         $("#ok-close").click(function(){
             $("#msg-success").hide(100);
@@ -162,14 +129,14 @@ if(empty($invite) || $rst->IsCharOK($code,$email)) {
     })
 </script>
 <script type="text/javascript">
-            // 过滤HTML标签以及&nbsp 来自：http://www.cnblogs.com/liszt/archive/2011/08/16/2140007.html
-            function removeHTMLTag(str) {
-                    str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
-                    str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
-                    str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
-                    str = str.replace(/&nbsp;/ig,'');//去掉&nbsp;
-                    return str;
-            }
+    // 过滤HTML标签以及&nbsp 来自：http://www.cnblogs.com/liszt/archive/2011/08/16/2140007.html
+    function removeHTMLTag(str) {
+        str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+        str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+        str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+        str = str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+        return str;
+    }
 </script>
 </body>
 </html>
