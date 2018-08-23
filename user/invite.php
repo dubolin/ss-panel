@@ -25,11 +25,11 @@ $code = $invite->CodeArray();
                     <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header">
-                            <h3 class="box-title">邀请</h3>
+                            <h3 class="box-title">我的邀请码</h3>
                         </div><!-- /.box-header -->
                         <div class="box-body">
-                            <p>当前您可以生成<code><?php   echo $U->InviteNum();  ?></code>个邀请码。  </p>
-                            <?php  if($U->InviteNum() !=0){ ?>
+                            <p><code><?php   echo $U->InviteKey();  ?></code></p>
+                            <?php  if($U->InviteKey() == ''){ ?>
                                 <button id="invite" class="btn btn-sm btn-info">生成我的邀请码</button>
                             <?php } ?>
 
@@ -42,7 +42,7 @@ $code = $invite->CodeArray();
                         </div><!-- /.box -->
 
                         <div class="box-header">
-                            <h3 class="box-title">我的邀请码</h3>
+                            <h3 class="box-title">我邀请的朋友</h3>
                         </div><!-- /.box-header -->
 
                         <div class="table-responsive">
@@ -50,7 +50,7 @@ $code = $invite->CodeArray();
                                 <thead>
                                 <tr>
                                     <th>###</th>
-                                    <th>邀请码</th>
+                                    <th>邮件</th>
                                     <th>状态</th>
                                 </tr>
                                 </thead>
@@ -84,9 +84,7 @@ $code = $invite->CodeArray();
 
                             <div class="callout callout-info">
                                 <h4>说明</h4>
-                                <p>用户注册48小时后，才可以生成邀请码。</p>
-                                <p>邀请码暂时无法购买，请珍惜。</p>
-                                <p>公共页面不定期发放邀请码，如果用完邀请码可以关注公共邀请。</p>
+                                <p>邀请朋友注册可获得1G流量。</p>
                             </div>
 
                         </div><!-- /.box-body -->

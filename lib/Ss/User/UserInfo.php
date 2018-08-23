@@ -49,6 +49,10 @@ class UserInfo {
         return $this->UserArray()['invite_num'];
     }
 
+    function Invitekey(){
+        return $this->UserArray()['invite_key'];
+    }
+
     function InviteNumToZero(){
         $this->db->update("user",[
             "invite_num" => '0'

@@ -9,8 +9,8 @@ $agree = $_POST['agree'];
 $code = $_POST['code'];
 
 $c = new \Ss\User\UserCheck();
-$code = new \Ss\User\InviteCode($code);
-if(!$code->IsCodeOk()){
+// $code = new \Ss\User\InviteCode($code);
+if(!$c->IsUserInviteKey($code)){
     $a['msg'] = "邀请码无效";
 }elseif(!$c->IsEmailLegal($email)){
     $a['msg'] = "邮箱无效";
@@ -26,7 +26,7 @@ if(!$code->IsCodeOk()){
     $a['msg'] = "用户名已经被使用";
 }else{
     // get value
-    $ref_by = $code->GetCodeUser();
+    $ref_by = $c->GetInviteKeyUser($code);
     $passwd = \Ss\User\Comm::SsPW($passwd);
     $plan = "A";
     $transfer = $a_transfer;
@@ -34,7 +34,6 @@ if(!$code->IsCodeOk()){
     //do reg
     $reg = new \Ss\User\Reg();
     $reg->Reg($name,$email,$passwd,$plan,$transfer,$invite_num,$ref_by);
-    $code->Del();
     $a['ok'] = '1';
     $a['msg'] = "注册成功";
 }

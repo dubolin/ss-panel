@@ -20,8 +20,9 @@ class Invite {
     }
 
     function CodeArray(){
-        $datas = $this->db->select($this->table,"*",[
-            "user" => $this->uid
+        $datas = $this->db->select("user","invite_key",[
+            "ORDER" => "last_check_in_time DESC",
+            "LIMIT" => "10"
         ]);
         return $datas;
     }

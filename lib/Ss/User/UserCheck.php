@@ -37,6 +37,24 @@ class UserCheck {
         }
     }
 
+    //is username used
+    function IsUserInviteKey($key){
+        if($this->db->has("user",[
+            "invite_key" => $key
+        ])){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
+    function GetInviteKeyUser($key){
+        $datas = $this->db->select($this->table,"uid",[
+            "invite_key" => $key,
+            "LIMIT" => "1"
+        ]);
+        return $datas['0']['uid'];
+    }
 
     //
     function IsEmailLegal($email){
