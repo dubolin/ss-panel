@@ -4,10 +4,10 @@ header("content-type:text/html;charset=utf-8");
 require_once '../lib/config.php';
 //mailgun
 require '../vendor/autoload.php';
-use Mailgun\Mailgun;
-$mg = new Mailgun($mailgun_key);
-$domain = $mailgun_domain;
-//
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+$mail = new PHPMailer(true);
+
 $code     = $_POST['code'];
 $email    = $_POST['email'];
 $uid      = $_POST['uid'];
@@ -26,7 +26,7 @@ if(!$rs){
 }elseif($repasswd != $password){
     $a['code'] = '0';
     $a['msg'] = "两次密码输入不符";
-}elseif(strlen($password)<8){
+}elseif(strlen($password)<6){
     $a['code'] = '0';
     $a['msg'] = "密码太短";
 }else{
@@ -34,10 +34,23 @@ if(!$rs){
     $u   = new \Ss\User\User($uid);
     if($rst->IsCharOK($code,$uid)){
         $NewPwd = $password;
-        $mg->sendMessage($domain, array('from'    => "no-reply@".$mailgun_domain,
-            'to'      => $email,
-            'subject' => $site_name." 提示：您的新密码重置成功！",
-            'text'    => "您在 ".date("Y-m-d H:i:s")." 重置了密码。"));
+        try {
+            $mail->SMTPDebug = 0;
+            $mail->isSMTP();
+            $mail->Host = $mail_smtp_Server;
+            $mail->SMTPAuth = true;
+            $mail->Username = $mail_smtp_Account;
+            $mail->Password = $mail_smtp_password;
+            $mail->SMTPSecure = $mail_smtp_Secure;
+            $mail->Port = $mail_smtp_Port; 
+            $mail->setFrom($mail_smtp_Account, $sender);
+            $mail->addAddress($email);
+            $mail->isHTML(true);
+            $mail->Subject = $site_name." 提示：您的新密码重置成功！";
+            $mail->Body    = "您在 ".date("Y-m-d H:i:s")." 重置了密码。";
+            $mail->send();
+        } catch (Exception $e) {
+        }
         $u->UpdatePWd($NewPwd);
         $rst->Del($code,$uid);
         $a['code'] = '1';
