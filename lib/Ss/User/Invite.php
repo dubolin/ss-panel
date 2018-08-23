@@ -13,7 +13,6 @@ class Invite {
 
 
     function  __construct($uid=0){
-
         global $db;
         $this->db   = $db;
         $this->uid = $uid;
@@ -23,6 +22,14 @@ class Invite {
         $datas = $this->db->select("user","invite_key",[
             "ORDER" => "last_check_in_time DESC",
             "LIMIT" => "10"
+        ]);
+        return $datas;
+    }
+
+    function InviteArray($uid){
+        $datas = $this->db->select("user",["email","reg_date"],[
+            "ref_by" => $uid,
+            "ORDER" => "reg_date DESC"
         ]);
         return $datas;
     }

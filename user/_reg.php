@@ -3,10 +3,9 @@ require_once '../lib/config.php';
 $email = $_POST['email'];
 $email = strtolower($email);
 $passwd = $_POST['passwd'];
-$name = $_POST['name'];
 $repasswd = $_POST['repasswd'];
 $agree = $_POST['agree'];
-$code = $_POST['code'];
+$code = strtoupper($_POST['code']);
 
 $c = new \Ss\User\UserCheck();
 // $code = new \Ss\User\InviteCode($code);
@@ -18,23 +17,22 @@ if(!$c->IsUserInviteKey($code)){
     $a['msg'] = "邮箱已被使用";
 }elseif($repasswd != $passwd){
     $a['msg'] = "两次密码输入不符";
-}elseif(strlen($passwd)<8){
+}elseif(strlen($passwd)<6){
     $a['msg'] = "密码太短";
-}elseif(strlen($name)<7){
-    $a['msg'] = "用户名太短";
-}elseif($c->IsUsernameUsed($name)){
-    $a['msg'] = "用户名已经被使用";
 }else{
     // get value
     $ref_by = $c->GetInviteKeyUser($code);
     $passwd = \Ss\User\Comm::SsPW($passwd);
     $plan = "A";
     $transfer = $a_transfer;
-    $invite_num = rand($user_invite_min,$user_invite_max);
-    //do reg
     $reg = new \Ss\User\Reg();
-    $reg->Reg($name,$email,$passwd,$plan,$transfer,$invite_num,$ref_by);
-    $a['ok'] = '1';
-    $a['msg'] = "注册成功";
+    if($reg->Reg($email,$passwd,$plan,$transfer,$ref_by)){
+        $a['ok'] = '1';
+        $a['msg'] = "注册成功";
+        $oo = new Ss\User\Ss($ref_by);
+        if($ref_by > 0) $oo->add_transfer($user_invite_get*$tomb);
+    }else{
+        $a['msg'] = "服务器繁忙请重试";
+    }
 }
 echo json_encode($a);

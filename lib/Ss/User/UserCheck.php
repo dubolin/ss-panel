@@ -49,7 +49,7 @@ class UserCheck {
     }
 
     function GetInviteKeyUser($key){
-        $datas = $this->db->select($this->table,"uid",[
+        $datas = $this->db->select("user","uid",[
             "invite_key" => $key,
             "LIMIT" => "1"
         ]);

@@ -15,20 +15,11 @@ class Reg {
         $this->db = $db;
     }
 
-    function GetLastPort(){
-        $datas = $this->db->select($this->table,"*",[
-            "ORDER" => "uid DESC",
-            "LIMIT" => 1
-        ]);
-        return $datas['0']['port'];
-    }
-
-    function Reg($username,$email,$pass,$plan,$transfer,$invite_num,$ref_by){
-
+    function Reg($email,$pass,$plan,$transfer,$ref_by){
+        global $port_min,$port_max;
         $sspass = \Ss\Etc\Comm::get_random_char(8);
-
-        $this->db->insert($this->table,[
-           "user_name" => $username,
+        return $this->db->insert($this->table,[
+           "user_name" => $email,
             "email" => $email,
             "pass" => $pass,
             "passwd" =>  $sspass,
@@ -37,8 +28,9 @@ class Reg {
             "d" => '0',
             "plan" => $plan,
             "transfer_enable" => $transfer,
-            "port" => $this->GetLastPort()+rand(1,5),
-            "invite_num" => $invite_num,
+            "port" => rand($port_min,$port_max),
+            "invite_num" => 0,
+            "invite_key" => \Ss\Etc\Comm::get_random_invie_key(6),
             "money" => '0',
             "#reg_date" =>  'NOW()',
             "ref_by" => $ref_by

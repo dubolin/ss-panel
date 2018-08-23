@@ -1,8 +1,6 @@
 <?php
 require_once '_main.php';
-
 $invite = new \Ss\User\Invite($uid);
-$code = $invite->CodeArray();
 ?>
 
     <!-- =============================================== -->
@@ -51,19 +49,23 @@ $code = $invite->CodeArray();
                                 <tr>
                                     <th>###</th>
                                     <th>邮件</th>
-                                    <th>状态</th>
+                                    <th>时间</th>
                                 </tr>
                                 </thead>
 
                                 <tbody>
                                 <?php
                                 $a = 0;
-                                foreach($code as $data ){
+                                $list = $invite->InviteArray($uid);
+                                foreach($list as $data ){
                                     ?>
                                     <tr>
                                         <td><?php echo $a;$a++; ?></td>
-                                        <td><?php echo $data['code'];?></td>
-                                        <td>可用</td>
+                                        <td><?php 
+                                        $s = split('@', $data['email']);
+                                        echo substr($s[0], 0,-4) .'****@'.$s[1];
+                                        ?></td>
+                                        <td><?php echo $data['reg_date']?></td>
                                     </tr>
                                 <?php } ?>
                                 </tbody>
@@ -84,7 +86,7 @@ $code = $invite->CodeArray();
 
                             <div class="callout callout-info">
                                 <h4>说明</h4>
-                                <p>邀请朋友注册可获得1G流量。</p>
+                                <p>邀请朋友注册可获得<?php echo $user_invite_get ?>M流量。</p>
                             </div>
 
                         </div><!-- /.box-body -->
@@ -94,7 +96,7 @@ $code = $invite->CodeArray();
 
 
 
-                </div>
+            </div>
         </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
 <?php
@@ -125,12 +127,12 @@ require_once '_footer.php'; ?>
     })
 </script>
 <script type="text/javascript">
-            // 过滤HTML标签以及&nbsp 来自：http://www.cnblogs.com/liszt/archive/2011/08/16/2140007.html
-            function removeHTMLTag(str) {
-                    str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
-                    str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
-                    str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
-                    str = str.replace(/&nbsp;/ig,'');//去掉&nbsp;
-                    return str;
-            }
+    // 过滤HTML标签以及&nbsp 来自：http://www.cnblogs.com/liszt/archive/2011/08/16/2140007.html
+    function removeHTMLTag(str) {
+        str = str.replace(/<\/?[^>]*>/g, ''); //去除HTML tag
+        str = str.replace(/[ | ]*\n/g, '\n'); //去除行尾空白
+        str = str.replace(/\n[\s| | ]*\r/g, '\n'); //去除多余空行
+        str = str.replace(/&nbsp;/ig, ''); //去掉&nbsp;
+        return str;
+    }
 </script>

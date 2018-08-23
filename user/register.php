@@ -31,10 +31,10 @@ require_once '../lib/config.php';
     <div class="register-box-body">
         <p class="login-box-msg">注册，轻松科学上网。</p>
 
-            <div class="form-group has-feedback">
+            <!-- <div class="form-group has-feedback">
                 <input type="text" id="name" class="form-control" placeholder="昵称"/>
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
-            </div>
+            </div> -->
             <div class="form-group has-feedback">
                 <input type="text" id="email" class="form-control" placeholder="邮箱"/>
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -104,13 +104,14 @@ require_once '../lib/config.php';
                 dataType:"json",
                 data:{
                     email: $("#email").val(),
-                    name: $("#name").val(),
+                    //name: $("#name").val(),
                     passwd: $("#passwd").val(),
                     repasswd: $("#repasswd").val(),
                     code: $("#code").val(),
                     agree: $("#agree").val()
                 },
                 success:function(data){
+                    console.log(data);
                     if(data.ok){
                         $("#msg-error").hide(10);
                         $("#msg-success").show(100);
