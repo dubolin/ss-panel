@@ -32,9 +32,6 @@ $uid  = $_GET['uid'];
     <div class="login-box-body">
         <p class="login-box-msg">重置密码</p>
 
-            <input type="hidden" id="code" name="code" class="form-control" value="<?php echo $code;?>" required autofocus>
-            <input type="hidden" id="uid" name="uid" class="form-control" value="<?php echo $uid;?>" required autofocus>
-
             <div class="form-group has-feedback">
                 <input id="email" name="Email" type="text" class="form-control" placeholder="Email"/>
                 <span  class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -84,7 +81,7 @@ $uid  = $_GET['uid'];
           function reset(){
                $.ajax({
                 type:"GET",
-                url:"_resetpwd.php?username="+$("#username").val()+"&email="+$("#email").val(),
+                url:"_resetpwd.php?email="+$("#email").val(),
                 dataType:"json",
                 success:function(data){
                     if(data.ok){

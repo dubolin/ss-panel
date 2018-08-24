@@ -57,13 +57,10 @@ class ResetPwd {
         }
     }
 
-    function Del($char,$uid)
+    function Del($uid)
     {
         $this->db->delete("ss_reset_pwd", [
-            "AND" => [
-                "user_id" => $uid,
-                "uni_char" => $char
-            ]
+            "user_id" => $uid
         ]);
     }
 

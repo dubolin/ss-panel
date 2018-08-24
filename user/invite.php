@@ -88,14 +88,13 @@ $key = $U->InviteKey();
                             <div class="callout callout-info">
                                 <h4>说明</h4>
                                 <p>邀请朋友注册可获得<?php echo $user_invite_get ?>M流量。</p>
+                                <p>邀请朋友越多每日签到获得更多流量。</p>
+                                <p>邀请朋友签到您同时获得额外流量。</p>
                             </div>
 
                         </div><!-- /.box-body -->
                     </div><!-- /.box -->
                 </div><!-- /.col (right) -->
-
-
-
 
             </div>
         </section><!-- /.content -->

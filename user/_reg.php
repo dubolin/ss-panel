@@ -34,6 +34,9 @@ if(!$rst->IsCharOK($emailcode,$email)){
         $a['msg'] = "注册成功";
         $oo = new Ss\User\Ss($ref_by);
         if($ref_by > 0) $oo->add_transfer($user_invite_get*$tomb);
+
+        $mail = new \Ss\Etc\Mail();
+        $mail->sendBySmtp($email, $site_name."注册成功","感谢您的注册".$site_url."<br/>邀请朋友注册可获得1024M流量<br/>邀请越多每日签到获得更多流量<br/>朋友签到您同时获得额外流量<br/>:)在个人中心->邀请好友:查看您的“邀请码”<br/>生活，被友情沁润，有滋有味，开心不已；人生，被情谊包裹，美仑美奂，甜蜜幸福；日子，被朋友问候，心窝暖暖，心情舒畅。朋友，唯愿你快乐每分每秒，幸福每时每刻。 ");
     }else{
         $a['msg'] = "服务器繁忙请重试";
     }

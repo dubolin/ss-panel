@@ -4,9 +4,6 @@ header("content-type:text/html;charset=utf-8");
 require_once '../lib/config.php';
 //mailgun
 require '../vendor/autoload.php';
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-$mail = new PHPMailer(true);
 
 $email    = $_GET['email'];
 $email = strtolower($email);
@@ -22,27 +19,13 @@ if($c->IsEmailUsed($email)){
 }else{
     $rst = new \Ss\User\EmailCheck($email);
     if($rst->IsAbleToRegister()){
-        $code = $rst->NewLog();        //send
-        try {
-            $mail->Charset='UTF-8';
-            $mail->SMTPDebug = 0;
-            $mail->isSMTP();
-            $mail->Host = $mail_smtp_Server;
-            $mail->SMTPAuth = true;
-            $mail->Username = $mail_smtp_Account;
-            $mail->Password = $mail_smtp_password;
-            $mail->SMTPSecure = $mail_smtp_Secure;
-            $mail->Port = $mail_smtp_Port; 
-            $mail->setFrom($mail_smtp_Account, $sender);
-            $mail->addAddress($email);
-            $mail->isHTML(true);
-            $mail->Subject = $site_name."注册连接";
-            $mail->Body    = '请访问此链接申请注册'.$site_url."user/register.php?invite=".$invite."&code=".$code."&email=".$email;
-            $mail->send();
+        $code = $rst->NewLog();
+        $mail = new \Ss\Etc\Mail();
+        if($mail->sendBySmtp($email, $site_name."注册连接","请访问此链接<a href=\"".$site_url."user/register.php?invite=".$invite."&code=".$code."&email=".$email."\">申请注册</a>")) {
             $a['code'] = '1';
             $a['ok'] = '1';
             $a['msg'] = "注册连接已经发送到邮箱";
-        } catch (Exception $e) {
+        } else {
             $a['code'] = '0';
             $a['msg'] = "邮件发送失败";
         }

@@ -2,6 +2,11 @@
 require_once '../lib/config.php';
 $code = $_GET['code'];
 $uid  = $_GET['uid'];
+
+if(empty($uid) || empty($code)) {
+    header("location:/user/resetpwd.php");
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html>

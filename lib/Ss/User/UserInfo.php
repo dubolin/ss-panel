@@ -80,6 +80,10 @@ class UserInfo {
         return $c;
     }
 
+    function GetRefBy(){
+        return $this->UserArray()['ref_by'];
+    }
+
     function UpdatePwd($pass){
         $this->db->update("user",[
             "pass" => $pass

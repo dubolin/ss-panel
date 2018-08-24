@@ -4,7 +4,7 @@ $code = $_GET['code'];
 $email = $_GET['email'];
 $invite = $_GET['invite'];
 $rst = new \Ss\User\EmailCheck($email);
-if(empty($invite) || $rst->IsCharOK($code,$email)) {
+if(empty($invite) || !$rst->IsCharOK($code,$email)) {
     header("location:/user/before.php");
     exit;
 }

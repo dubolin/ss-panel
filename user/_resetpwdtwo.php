@@ -2,12 +2,6 @@
 //设置编码
 header("content-type:text/html;charset=utf-8");
 require_once '../lib/config.php';
-//mailgun
-require '../vendor/autoload.php';
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-$mail = new PHPMailer(true);
-
 $code     = $_POST['code'];
 $email    = $_POST['email'];
 $uid      = $_POST['uid'];
@@ -34,26 +28,12 @@ if(!$rs){
     $u   = new \Ss\User\User($uid);
     if($rst->IsCharOK($code,$uid)){
         $NewPwd = $password;
-        try {
-            $mail->Charset='UTF-8';
-            $mail->SMTPDebug = 0;
-            $mail->isSMTP();
-            $mail->Host = $mail_smtp_Server;
-            $mail->SMTPAuth = true;
-            $mail->Username = $mail_smtp_Account;
-            $mail->Password = $mail_smtp_password;
-            $mail->SMTPSecure = $mail_smtp_Secure;
-            $mail->Port = $mail_smtp_Port; 
-            $mail->setFrom($mail_smtp_Account, $sender);
-            $mail->addAddress($email);
-            $mail->isHTML(true);
-            $mail->Subject = $site_name." 提示：您的新密码重置成功！";
-            $mail->Body    = "您在 ".date("Y-m-d H:i:s")." 重置了密码。";
-            $mail->send();
-        } catch (Exception $e) {
-        }
+
+        $mail = new \Ss\Etc\Mail();
+        $mail->sendBySmtp($email, $site_name." 提示：您的新密已重置！","您在 ".date("Y-m-d H:i:s")." 重置了密码。");
+
         $u->UpdatePWd($NewPwd);
-        $rst->Del($code,$uid);
+        $rst->Del($uid);
         $a['code'] = '1';
         $a['ok'] = '1';
         $a['msg']  =  "您的新密码重置成功！";
