@@ -53,7 +53,7 @@ class UserCheck {
             "invite_key" => $key,
             "LIMIT" => "1"
         ]);
-        return $datas['0']['uid'];
+        return $datas['0'];
     }
 
     //

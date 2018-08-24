@@ -16,6 +16,9 @@ if($c->IsEmailUsed($email)){
 }elseif(!$c->IsUserInviteKey($invite)){
     $a['code'] = '0';
     $a['msg'] = "邀请码无效";
+}elseif (!email_is_allow_doname($email)) {
+    $a['code'] = '0';
+    $a['msg'] = "邮箱不支持，请使用一下邮箱：".join(', ',$mail_allow_domain);
 }else{
     $rst = new \Ss\User\EmailCheck($email);
     if($rst->IsAbleToRegister()){
@@ -33,6 +36,15 @@ if($c->IsEmailUsed($email)){
         $a['code'] = '0';
         $a['msg']  =  "24小时内申请超过上限";
     }
+}
+
+function email_is_allow_doname($email){
+    global $mail_allow_domain;
+    $s = split('@', $email);
+    if(in_array(strtolower($s[1]), $mail_allow_domain)){
+        return ture;
+    }
+    return false;
 }
 echo json_encode($a);
 
