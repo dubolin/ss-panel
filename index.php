@@ -1,5 +1,24 @@
 <?php
 include_once 'lib/config.php';
+$is_login = false;
+if (isset($_COOKIE['uid']) || $_COOKIE['uid'] != '') {
+    //co
+    $uid = $_COOKIE['uid'];
+    $user_email = $_COOKIE['user_email'];
+    $user_pwd = $_COOKIE['user_pwd'];
+
+    $U = new \Ss\User\UserInfo($uid);
+    //验证cookie
+    $pwd = $U->GetPasswd();
+    $pw = \Ss\User\Comm::CoPW($pwd);
+    if ($pw != $user_pwd || $pw == null || $user_pwd == null) {
+        $is_login = false;
+    } else {
+        $is_login = true;
+    }
+} else {
+    $is_login = false;
+}
 include_once 'header.php';
 ?>
 
@@ -12,7 +31,12 @@ include_once 'header.php';
                 <h5 class="header col s12 light">轻松科学上网   保护个人隐私</h5>
             </div>
             <div class="row center">
-                <a href="user/register.php" id="download-button" class="btn-large waves-effect waves-light orange">立即注册</a>
+                <?php if($is_login){ ?>
+                <a href="user" id="download-button" class="btn-large waves-effect waves-light orange">用户中心</a>
+                <?php }else{ ?>
+                <a href="user/register.php" id="download-button" class="btn-large waves-effect waves-light orange">注册</a>
+                <a href="user/login.php" id="download-button" class="btn-large waves-effect waves-light orange">登陆</a>
+                <?php }?>
             </div>
             <br><br>
         </div>
@@ -65,5 +89,5 @@ include_once 'header.php';
 
     </div>
 </div>
-<?php  include_once 'ana.php';
-       include_once 'footer.php';?>
+<?php include_once 'ana.php';
+include_once 'footer.php';?>
