@@ -39,6 +39,11 @@ include_once 'header.php';
                                 <td>Win游戏专用</td>
                                 <td><a href="/download/SSTap.7z">下载</a></td>
                             </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>ios(<a href="https://www.i4.cn">手机助手安装</a>)</td>
+                                <td><a href="/download/ssr-ios.ipa">下载</a></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

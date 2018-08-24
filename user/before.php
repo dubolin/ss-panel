@@ -26,7 +26,7 @@ $invite = $_GET['invite'];
 <body class="login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b><?php echo $site_name;?></b></a>
+        <a href="/index.php"><b><?php echo $site_name;?></b></a>
     </div><!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">获取注册连接</p>

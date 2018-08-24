@@ -25,7 +25,7 @@ require_once '../lib/config.php';
 <body class="login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b><?php echo $site_name;  ?></b></a>
+        <a href="/index.php"><b><?php echo $site_name;  ?></b></a>
     </div><!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg">登录到管理面板</p>
