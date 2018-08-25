@@ -6,3 +6,6 @@ build/
 composer
 node_modules/
 npm-debug.log
+download
+ftpsync.settings
+lib
