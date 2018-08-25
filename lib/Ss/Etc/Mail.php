@@ -10,7 +10,24 @@ class Mail {
 		$this->mail = new PHPMailer(true);
 	}
 
-	function sendByMailgun() {
+	function send($email, $subject, $body) {
+		global $Selectmailservice;
+		switch ($Selectmailservice) {
+			case 'mail-gun':
+				# code...
+				break;
+			case 'mail-smtp':
+				# code...
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
+	}
+
+	function sendByMailgun($email, $subject, $body) {
 
 	}
 

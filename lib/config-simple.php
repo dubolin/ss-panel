@@ -58,15 +58,28 @@ $user_invite_max = '1';
 //推荐用户获得流量M
 $user_invite_get = 1024;
 
+//选择邮件服务
+// smtp未完成，现在只能用mailgun
+//mail-gun
+//mail-smtp
+$Selectmailservice = "mail-gun";
+
 //允许注册的邮件后缀
 $mail_allow_domain = ['gmail.com', '163.com', 'qq.com', 'live.cn', 'live.com', 'sohu.com', 'yeah.net', 'vip.qq.com', 'foxmail.com', 'outlook.com', 'hotmail.com', 'sina.com', '126.com', 'icloud.com'];
+
+//邮件发件人
+$mailgun_sender = "xxx@xxx.xx";
+
+//mail-gun
+// Get your key from https://mailgun.com
+$mailgun_key = "";
+$mailgun_domain = "";
 
 //邮件发件人
 $mail_smtp_Sender = "ssr小组";
 
 //mail-smtp
 $mail_smtp_Domain = "*****.com";
-//smtp发件方式暂时无法使用
 //设置smtp服务器连接方式:
 $mail_smtp_Secure = "ssl";
 //smtp服务器端口 25 , 465 ...
