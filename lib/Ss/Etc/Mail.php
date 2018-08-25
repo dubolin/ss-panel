@@ -2,33 +2,38 @@
 
 namespace Ss\Etc;
 require_once '../vendor/autoload.php';
-use PHPMailer\PHPMailer\PHPMailer;
+use Mailgun\Mailgun;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+
 class Mail {
-    private $mail;
-    function __construct() {
+	private $mail;
+	function __construct() {
 		$this->mail = new PHPMailer(true);
 	}
 
 	function send($email, $subject, $body) {
 		global $Selectmailservice;
 		switch ($Selectmailservice) {
-			case 'mail-gun':
-				# code...
-				break;
-			case 'mail-smtp':
-				# code...
-				break;
-			
-			default:
-				# code...
-				break;
+		case 'mail-gun':
+			$this->sendByMailgun($email, $subject, $body);
+			break;
+		case 'mail-smtp':
+			$this->sendBySmtp($email, $subject, $body);
+			break;
+		default:
+			break;
 		}
-
 	}
 
 	function sendByMailgun($email, $subject, $body) {
-
+		global $mailgun_key, $mailgun_domain;
+		$mg = new Mailgun($mailgun_key);
+		$mg->sendMessage($mailgun_domain, array('from' => "no-reply@" . $mailgun_domain,
+			'to' => $email,
+			'subject' => $subject,
+			'text' => $body)
+		);
 	}
 
 	function sendBySmtp($email, $subject, $body) {
@@ -53,7 +58,7 @@ class Mail {
 			$this->mail->addAddress($email);
 			$this->mail->isHTML(true);
 			$this->mail->Subject = $subject;
-            $this->mail->Body = $body;
+			$this->mail->Body = $body;
 			// $this->mail->MsgHTML = $body;
 			$this->mail->send();
 			return ture;
