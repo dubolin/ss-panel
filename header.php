@@ -18,6 +18,7 @@
             <li><a href="code.php">邀请码</a></li>
             <?php if($is_login){ ?>
             <li><a href="user">用户中心</a></li>
+            <li><a href="user/logout.php">退出</a></li>
             <?php }else{ ?>
             <li><a href="user/login.php">登陆</a></li>
             <?php }?>
@@ -29,6 +30,7 @@
             <li><a href="code.php">邀请码</a></li>
             <?php if($is_login){ ?>
             <li><a href="user">用户中心</a></li>
+            <li><a href="user/logout.php">退出</a></li>
             <?php }else{ ?>
             <li><a href="user/login.php">登陆</a></li>
             <?php }?>

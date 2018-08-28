@@ -6,3 +6,5 @@ ftpsync.settings
 .env
 storage
 download
+node_modules
+public
